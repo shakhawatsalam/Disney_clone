@@ -1,7 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+import auth from '../firebase';
+import { useSignInWithGoogle} from 'react-firebase-hooks/auth';
+// import { auth, provider } from "/firebase";
 
 function Header(props) {
+    const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+// handle Auth 
+    const handleAuth = () => {
+
+    }
+
     return (
         <Nav>
             <Logo>
@@ -33,7 +42,7 @@ function Header(props) {
                     <span>SERIES</span>
                 </a>
             </NavMenu>
-            <Login>Login</Login>
+            <Login onClick={() => signInWithGoogle()}>Login</Login>
         </Nav>
     )
 };
