@@ -1,50 +1,118 @@
 import React from 'react'
 import styled from 'styled-components'
 import auth from '../firebase';
-import { useSignInWithGoogle} from 'react-firebase-hooks/auth';
+import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import { selectUserName, selectUserPhoto, setSingOutState, setUserLoginDetails } from '../features/user/userSlice';
+import { signOut } from 'firebase/auth';
+import { useEffect } from 'react';
 // import { auth, provider } from "/firebase";
 
 function Header(props) {
-    const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-// handle Auth 
-    const handleAuth = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const userName = useSelector(selectUserName);
+  // const userPhoto = useSelector(selectUserPhoto);
+  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
 
-    }
+  // // handle Auth
+  // useEffect(() => {
+  //   if (user) {
+  //     setUser(user);
+  //     navigate('/home');
+  //   }
+  // }, [userName]);
 
-    return (
-        <Nav>
-            <Logo>
-                <img src="/Images/logo.svg" alt="Disney+" />
-            </Logo>
+  // const handleAuth = async () => {
+  //   await signInWithGoogle();
+  // };
+
+  // const logout = () => {
+  //   dispatch(setSingOutState());
+  //   signOut(auth);
+  //   navigate('/');
+  // };
+  console.log("Photourl=", user?.user?.photoURL)
+  // // console.log("email=", user?.user?.email)
+  // console.log("Name=", user?.user?.displayName)
+  // // console.log("userPhoto=", userPhoto);
+  // // console.log("userName=", userName);
+
+  // // Set User function
+  // const setUser = (user) => {
+  //   console.log(user?.user?.displayName);
+  //   console.log(user?.user?.photoURL);
+  //   dispatch(
+  //     setUserLoginDetails({
+  //       name: user?.user?.displayName,
+  //       email: user?.user?.email,
+  //       photo: user?.user?.photoURL,
+  //     })
+  //   )
+  // };
+
+
+  // -------------MY OWN CODE---------
+
+  const handleAuth = () => {
+    signInWithGoogle();
+    navigate('/home');
+  }
+  const logout = () => {
+    // dispatch(setSingOutState());
+    signOut(auth);
+    navigate('/');
+    window.location.reload(false);
+  };
+
+
+  return (
+    <Nav>
+      <Logo>
+        <img src="/Images/logo.svg" alt="Disney+" />
+      </Logo>
+      {!user?.user?.displayName ? (
+        <Login onClick={() => handleAuth()}>Login</Login>
+      ) :
+        (
+          <>
             <NavMenu>
-                <a href="/home">
-                    <img src="/images/home-icon.svg" alt="HOME" />
-                    <span>HOME</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/search-icon.svg" alt="SEARCH" />
-                    <span>SEARCH</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
-                    <span>WATCHLIST</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/original-icon.svg" alt="ORIGINALS" />
-                    <span>ORIGINALS</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/movie-icon.svg" alt="MOVIES" />
-                    <span>MOVIES</span>
-                </a>
-                <a href="/home">
-                    <img src="/images/series-icon.svg" alt="SERIES" />
-                    <span>SERIES</span>
-                </a>
+              <a href="/home">
+                <img src="/images/home-icon.svg" alt="HOME" />
+                <span>HOME</span>
+              </a>
+              <a href="/home">
+                <img src="/images/search-icon.svg" alt="SEARCH" />
+                <span>SEARCH</span>
+              </a>
+              <a href="/home">
+                <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
+                <span>WATCHLIST</span>
+              </a>
+              <a href="/home">
+                <img src="/images/original-icon.svg" alt="ORIGINALS" />
+                <span>ORIGINALS</span>
+              </a>
+              <a href="/home">
+                <img src="/images/movie-icon.svg" alt="MOVIES" />
+                <span>MOVIES</span>
+              </a>
+              <a href="/home">
+                <img src="/images/series-icon.svg" alt="SERIES" />
+                <span>SERIES</span>
+              </a>
             </NavMenu>
-            <Login onClick={() => signInWithGoogle()}>Login</Login>
-        </Nav>
-    )
+            <SignOut>
+              <UserImg src={user?.user?.photoURL} alt={''} />
+              <DropDown>
+                <span onClick={() => logout()}>Sign out</span>
+              </DropDown>
+            </SignOut>
+          </>
+        )}
+    </Nav>
+  );
 };
 const Nav = styled.nav`
   position: fixed;
@@ -157,6 +225,46 @@ const Login = styled.a`
     }
 
  `;
+const UserImg = styled.img`
+  height: 100%;
+
+ `;
+const DropDown = styled.div`
+  position: absolute;
+  top: 48px;
+  right: 0px;
+  background: rgb(19, 19, 19);
+  border: 1px solid rgba(151, 151, 151, 0.34);
+  border-radius: 4px;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 18px 0px;
+  padding: 10px;
+  font-size: 14px;
+  letter-spacing: 3px;
+  width: 100px;
+  opacity: 0;
+
+ `;
+const SignOut = styled.div`
+  position: relative;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  ${UserImg} {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+  }
+  &:hover {
+    ${DropDown} {
+      opacity: 1;
+      transition-duration: 1s;
+    }
+  }
+`;
+
 
 
 
