@@ -52,9 +52,11 @@ const Container = styled.div`
     gap: 25px;
     grid-template-columns: repeat(5, minmax(0,1fr));
 
-`;
+    @media (max-width: 768px) {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
 
-export default Viewers
+`;
 
 const Wrap = styled.div`
   padding-top: 56.25%;
@@ -66,4 +68,21 @@ const Wrap = styled.div`
     position: relative;
     transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
     border: 3px solid rgba(249, 249, 249, 0.1);
+
+    img {
+    inset: 0px;
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    position: absolute;
+    transition: opacity 500ms ease-in-out 0s;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+  }
 `;
+
+export default Viewers
+
+
