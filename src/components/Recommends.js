@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export const Recommends = () => {
     return (
         <Container>
-            <h1>New to Disney+</h1>
+            <h1>Recommended For You</h1>
             <Content>
                 <Wrap>
                     <Link to={'/'}>

@@ -1,8 +1,8 @@
+import React from 'react'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import React from 'react'
 
-function NewDisney() {
+function Originals() {
     return (
         <Container>
             <h1>New to Disney+</h1>
@@ -30,9 +30,7 @@ function NewDisney() {
             </Content>
         </Container>
     )
-}
-
-export default NewDisney
+};
 
 const Container = styled.div`
     padding: 0 0 26px;
@@ -81,3 +79,5 @@ const Wrap = styled.div`
     }
       
 `;
+
+export default Originals

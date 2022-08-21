@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import React from 'react'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
-function NewDisney() {
+const Trending = () => {
     return (
         <Container>
-            <h1>New to Disney+</h1>
+            <h4>Trending</h4>
             <Content>
                 <Wrap>
                     <Link to={'/'}>
@@ -30,9 +30,8 @@ function NewDisney() {
             </Content>
         </Container>
     )
-}
+};
 
-export default NewDisney
 
 const Container = styled.div`
     padding: 0 0 26px;
@@ -81,3 +80,5 @@ const Wrap = styled.div`
     }
       
 `;
+
+export default Trending
