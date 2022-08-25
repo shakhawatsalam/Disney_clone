@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { selectUserName } from '../features/user/userSlice';
-import { auth, database, db } from '../firebase';
+import { db } from '../firebase';
 import ImgSlider from './ImgSlider';
 import NewDisney from './NewDisney';
 import Originals from './Originals';
@@ -13,11 +11,12 @@ import Trending from './Trending';
 import Viewers from './Viewers';
 import { getDocs, collection } from 'firebase/firestore';
 import { useState } from 'react';
+import { setMovies } from '../features/movie/movieSlice';
 
 function Home() {
   const dispatch = useDispatch();
   const userName = useSelector(selectUserName);
-  const [movies, setMovies] = useState([]);
+  const [movies, setMoviess] = useState([]);
   // const [recommends, setRecommends] = useState([]);
   // let newDisneys = [];
   // let originals = [];
@@ -35,15 +34,24 @@ function Home() {
         data: doc.data(),
         id: doc.id,
       }))
-      setMovies(mov)
+      setMoviess(mov)
     })
   }
   // console.log(movies)
-  const recommends = movies.filter(movie => movie.data.type === "recommend");
-  const newDisneys = movies.filter(movie => movie.data.type === "new");
-  const originals = movies.filter(movie => movie.data.type === "original");
-  const trending = movies.filter(movie => movie.data.type === "trending");
+  useEffect(() => {
+    const recommends = movies.filter(movie => movie.data.type === "recommend");
+    const newDisneys = movies.filter(movie => movie.data.type === "new");
+    const originals = movies.filter(movie => movie.data.type === "original");
+    const trending = movies.filter(movie => movie.data.type === "trending");
 
+    dispatch(setMovies({
+      recommend: recommends,
+      newDisney: newDisneys,
+      original: originals,
+      trending: trending,
+    }));
+
+  }, [movies]);
 
 
   return (

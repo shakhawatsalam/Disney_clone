@@ -1,32 +1,26 @@
 import React from 'react'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectOriginal } from '../features/movie/movieSlice';
 
 function Originals() {
+    const movies = useSelector(selectOriginal);
+    console.log(movies)
     return (
         <Container>
-            <h1>New to Disney+</h1>
+            <h4>Originals</h4>
             <Content>
-                <Wrap>
-                    <Link to={'/'}>
-                        <img src="https://www.disneyfoodblog.com/wp-content/uploads/2021/06/jungle-cruise-movie-disney-disney-plus-dwayne-the-rock-johnson-emily-blunt-3.png" alt="" />
-                    </Link>
-                </Wrap>
-                <Wrap>
-                    <Link to={'/'}>
-                        <img src="https://www.disneyfoodblog.com/wp-content/uploads/2021/06/jungle-cruise-movie-disney-disney-plus-dwayne-the-rock-johnson-emily-blunt-3.png" alt="" />
-                    </Link>
-                </Wrap>
-                <Wrap>
-                    <Link to={'/'}>
-                        <img src="https://www.disneyfoodblog.com/wp-content/uploads/2021/06/jungle-cruise-movie-disney-disney-plus-dwayne-the-rock-johnson-emily-blunt-3.png" alt="" />
-                    </Link>
-                </Wrap>
-                <Wrap>
-                    <Link to={'/'}>
-                        <img src="https://www.disneyfoodblog.com/wp-content/uploads/2021/06/jungle-cruise-movie-disney-disney-plus-dwayne-the-rock-johnson-emily-blunt-3.png" alt="" />
-                    </Link>
-                </Wrap>
+                {movies &&
+                    movies.map((movie, key) => (
+                        <Wrap key={key}>
+                            {movie.id}
+                            <Link to={`/detail/` + movie.id}>
+                                <img src={movie.data.cardImg} alt={movie.data.title} />
+                            </Link>
+
+                        </Wrap>
+                    ))}
             </Content>
         </Container>
     )
