@@ -10,12 +10,13 @@ import { useEffect } from 'react';
 // import { auth, provider } from "/firebase";
 
 function Header(props) {
+  const loggedIn = window.localStorage.getItem("isLoggedIn");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-
+  console.log(userName);
   // // handle Auth
   useEffect(() => {
     if (user) {
@@ -53,11 +54,13 @@ function Header(props) {
   const handleAuth = () => {
     signInWithGoogle();
     navigate('/home');
+    window.localStorage.setItem("isLoggedIn", true);
   }
   const logout = () => {
     // dispatch(setSingOutState());
     signOut(auth);
     navigate('/');
+    window.localStorage.removeItem("isLoggedIn")
     window.location.reload(false);
   };
 
@@ -67,7 +70,7 @@ function Header(props) {
       <Logo>
         <img src="/Images/logo.svg" alt="Disney+" />
       </Logo>
-      {!user?.user?.displayName ? (
+      {!loggedIn ? (
         <Login onClick={() => handleAuth()}>Login</Login>
       ) :
         (

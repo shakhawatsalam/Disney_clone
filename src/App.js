@@ -7,11 +7,12 @@ import { Loading } from './components/Loading';
 import Login from './components/Login';
 
 function App() {
+  const loggedIn = window.localStorage.getItem("isLoggedIn");
   return (
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={loggedIn? <Home/> :<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/detail/:id" element={<Detail />} />
       </Routes>
