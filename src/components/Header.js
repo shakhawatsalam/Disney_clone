@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { auth } from '../firebase';
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { selectUserName, selectUserPhoto, setSingOutState, setUserLoginDetails } from '../features/user/userSlice';
@@ -15,23 +15,23 @@ function Header(props) {
   const navigate = useNavigate();
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-  console.log(userName);
+  const [user] = useAuthState(auth);
+  const [signInWithGoogle, googleUser, loading, error] = useSignInWithGoogle(auth);
   // // handle Auth
   useEffect(() => {
-    if (user) {
+    if (googleUser) {
       navigate('/home');
       dispatch(
         setUserLoginDetails({
-          name: user?.user?.displayName,
-          email: user?.user?.email,
-          photo: user?.user?.photoURL,
+          name: googleUser?.user?.displayName,
+          email: googleUser?.user?.email,
+          photo: googleUser?.user?.photoURL,
         })
       )
     } else {
       dispatch(setSingOutState());
     }
-  }, [user]);
+  }, [googleUser]);
 
   // const handleAuth = async () => {
   //   await signInWithGoogle();
@@ -42,8 +42,8 @@ function Header(props) {
   //   signOut(auth);
   //   navigate('/');
   // };
-  console.log('hello', userName);
-  console.log('hello', userPhoto);
+  // console.log('hello', userName);
+  // console.log('hello', userPhoto);
 
   // Set User function
 
@@ -70,7 +70,7 @@ function Header(props) {
       <Logo>
         <img src="/Images/logo.svg" alt="Disney+" />
       </Logo>
-      {!loggedIn ? (
+      {!loggedIn || loading ? (
         <Login onClick={() => handleAuth()}>Login</Login>
       ) :
         (
@@ -102,7 +102,7 @@ function Header(props) {
               </a>
             </NavMenu>
             <SignOut>
-              <UserImg src={user?.user?.photoURL} alt={''} />
+              <UserImg src={user?.photoURL} alt={''} />
               <DropDown>
                 <span onClick={() => logout()}>Sign out</span>
               </DropDown>
