@@ -18,9 +18,9 @@ const userSlice = createSlice({
             state.photo = action.payload.photo;
         },
         setSingOutState: (state) => {
-            state.name = "";
-            state.email = "";
-            state.photo = "";
+            state.name = null;
+            state.email = null;
+            state.photo = null;
         },
     },
 });

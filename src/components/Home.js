@@ -9,19 +9,25 @@ import Originals from './Originals';
 import { Recommends } from './Recommends';
 import Trending from './Trending';
 import Viewers from './Viewers';
+import { useNavigate } from "react-router-dom";
 import { getDocs, collection } from 'firebase/firestore';
 import { useState } from 'react';
 import { setMovies } from '../features/movie/movieSlice';
 
 function Home() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const userName = useSelector(selectUserName);
   const [movies, setMoviess] = useState([]);
   // const [recommends, setRecommends] = useState([]);
   // let newDisneys = [];
   // let originals = [];
   // let trending = [];
-
+  useEffect(() => {
+    if (!userName) {
+      navigate('/')
+    }
+  }, [userName])
 
   useEffect(() => {
     getMovies();

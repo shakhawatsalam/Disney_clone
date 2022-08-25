@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {auth} from '../firebase';
+import { auth } from '../firebase';
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
@@ -12,17 +12,25 @@ import { useEffect } from 'react';
 function Header(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const userName = useSelector(selectUserName);
-  // const userPhoto = useSelector(selectUserPhoto);
+  const userName = useSelector(selectUserName);
+  const userPhoto = useSelector(selectUserPhoto);
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
 
   // // handle Auth
-  // useEffect(() => {
-  //   if (user) {
-  //     setUser(user);
-  //     navigate('/home');
-  //   }
-  // }, [userName]);
+  useEffect(() => {
+    if (user) {
+      navigate('/home');
+      dispatch(
+        setUserLoginDetails({
+          name: user?.user?.displayName,
+          email: user?.user?.email,
+          photo: user?.user?.photoURL,
+        })
+      )
+    } else {
+      dispatch(setSingOutState());
+    }
+  }, [user]);
 
   // const handleAuth = async () => {
   //   await signInWithGoogle();
@@ -33,24 +41,11 @@ function Header(props) {
   //   signOut(auth);
   //   navigate('/');
   // };
-  console.log("Photourl=", user?.user?.photoURL)
-  // // console.log("email=", user?.user?.email)
-  // console.log("Name=", user?.user?.displayName)
-  // // console.log("userPhoto=", userPhoto);
-  // // console.log("userName=", userName);
+  console.log('hello', userName);
+  console.log('hello', userPhoto);
 
-  // // Set User function
-  // const setUser = (user) => {
-  //   console.log(user?.user?.displayName);
-  //   console.log(user?.user?.photoURL);
-  //   dispatch(
-  //     setUserLoginDetails({
-  //       name: user?.user?.displayName,
-  //       email: user?.user?.email,
-  //       photo: user?.user?.photoURL,
-  //     })
-  //   )
-  // };
+  // Set User function
+
 
 
   // -------------MY OWN CODE---------
